@@ -92,14 +92,6 @@ void Class_Image::Init()
     Motor_Image_Pitch.PID_Angle.Init(100.0f, 1.5f, 5.0f, 0.0f, 0.0f, 150.0f,0.0f, 0.0f, 0.0f, 0.001f);
     Motor_Image_Pitch.PID_Omega.Init(300.0f, 50.0f, 0.0f, 0.0f, 500.0f, 10000.0f,0.0f, 0.0f, 0.0f, 0.001f);
     Motor_Image_Pitch.Init(&hcan1, DJI_Motor_ID_0x206,DJI_Motor_Control_Method_ANGLE);
-	
-//	 Motor_Image_Roll.PID_Angle.Init(250.0f, 0.0f, 5.0f, 0.0f, 0.0f, 150.0f,0.0f, 0.0f, 0.0f, 0.001f);
-//    Motor_Image_Roll.PID_Omega.Init(250.0f, 0.0f, 0.0f, 0.0f, 3000.0f, 10000.0f,0.0f, 0.0f, 0.0f, 0.001f);
-//    Motor_Image_Roll.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_ANGLE);
-//    //Í¼´«pitchÖáµç»ú
-//    Motor_Image_Pitch.PID_Angle.Init(50.0f, 1.5f, 2.0f, 0.0f, 0.0f, 150.0f,0.0f, 0.0f, 0.0f, 0.001f);
-//    Motor_Image_Pitch.PID_Omega.Init(500.0f, 200.0f, 0.0f, 0.0f, 3000.0f, 10000.0f,0.0f, 0.0f, 0.0f, 0.001f);
-//    Motor_Image_Pitch.Init(&hcan1, DJI_Motor_ID_0x206,DJI_Motor_Control_Method_ANGLE);
 }
 
 void Class_Image::Output()
