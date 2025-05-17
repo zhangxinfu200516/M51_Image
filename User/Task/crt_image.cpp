@@ -134,8 +134,5 @@ void Class_Image::TIM_Calculate_PeriodElapsedCallback()
     
 
     Motor_Image_Pitch.TIM_PID_PeriodElapsedCallback();
-
-    // Motor_Image_Roll.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-    // Motor_Image_Roll.Set_Target_Torque(0.0f);
 	Motor_Image_Roll.TIM_PID_PeriodElapsedCallback();
 }
