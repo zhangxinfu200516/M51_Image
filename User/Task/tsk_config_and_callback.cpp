@@ -29,6 +29,7 @@
 #include "task.h"
 #include "crt_image.h"
 #include "Steering_Wheel_Task.h"
+#include "dvc_dmimu.h"
 /* Private macros ------------------------------------------------------------*/
 //osThreadId_t steering_wheel_taskHandle;
 //const osThreadAttr_t steering_wheel_task_attributes = {
@@ -43,6 +44,7 @@
 
 /* Private function declarations ---------------------------------------------*/
 Class_Image Image;
+Class_DM_IMU IMU;
 /* Function prototypes -------------------------------------------------------*/
 #ifdef STEERING_WHEEL
 /**
@@ -115,17 +117,22 @@ void Image_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
-    case (0x206):
+    case (0x205):
     {
         Image.Motor_Image_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x205):
+    case (0x206):
     {
         Image.Motor_Image_Roll.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
+    case (0x11):
+    {
+        IMU.IMU_UpdateData(CAN_RxMessage->Data);
     }
+    break;
+	}
 }
 void Image_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
@@ -133,7 +140,7 @@ void Image_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     {
     case (0x02E):
     {
-        float rx_pitch_angle,rx_roll_angle;
+        float rx_pitch_angle, rx_roll_angle;
         memcpy(&rx_pitch_angle, CAN_RxMessage->Data, sizeof(float));
         memcpy(&rx_roll_angle, CAN_RxMessage->Data + 4, sizeof(float));
         Image.Set_Target_Image_Pitch_Angle(rx_pitch_angle);
@@ -178,6 +185,7 @@ Task_Init()
  * @brief 前台循环任务
  *
  */
+uint8_t can_tx_status = 1;
 extern "C" void Task_Loop()
 {
     static uint16_t mod150 = 0;
@@ -190,8 +198,20 @@ extern "C" void Task_Loop()
         mod150 = 0;
     }
     Image.TIM_Calculate_PeriodElapsedCallback();
+    static uint8_t mod5 = 0;
+    mod5++;
+    if(mod5 == 5)
+    {
+        CAN_Send_Data(&hcan1,0x1FF,CAN1_0x1ff_Tx_Data,8);
+        mod5 = 0;
+    }
+    else
+    {
+        can_tx_status = IMU.IMU_RequestData(&hcan1,0x01,3);
+    }
 
-    CAN_Send_Data(&hcan1,0x1FF,CAN1_0x1ff_Tx_Data,8);
+    memcpy(&CAN1_0x0A_Tx_Data,&IMU.Data.yaw,4);
+    //CAN_Send_Data(&hcan1,0x0A,CAN1_0x0A_Tx_Data,8);
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

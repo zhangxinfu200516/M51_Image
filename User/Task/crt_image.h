@@ -44,7 +44,7 @@ public:
     inline void Set_Image_Roll_Calibrate_Offset(float __Image_Roll_Calibrate_Offset);
     inline void Set_Image_Pitch_Calibrate_Offset(float __Image_Pitch_Calibrate_Offset);
     inline void Set_Set_Image_Roll_Calibrate_Speed(float __Image_Roll_Calibrate_Speed);
-    bool Motor_Calibration(Class_DJI_Motor_C610 *motor,float *Cali_Offset,float Cali_Omega,float Cali_Max_Out);
+    bool Motor_Calibration(Class_DJI_Motor_C610 *motor,float *Cali_Offset,float Cali_Omega,float Cali_Max_Out,uint16_t &count);
     void TIM_Calculate_PeriodElapsedCallback();
 protected:
 
@@ -55,9 +55,9 @@ protected:
     //图传pitch轴角度
     float Target_Image_Pitch_Angle = 0.0f;//待定
     //图传roll轴校准速度rad/s
-    float Image_Roll_Calibrate_Speed = 3.5f;
+    float Image_Roll_Calibrate_Speed = -3.5f;
     //图传pitch轴校准速度rad/s 
-    float Image_Pitch_Calibrate_Speed = -5.0f;
+    float Image_Pitch_Calibrate_Speed = -9.0f;
     //图传roll轴校准完后相对位置
     float Image_Roll_Calibrate_Offset = 0.0f;
     //图传pitch轴校准完后相对位置
@@ -65,7 +65,9 @@ protected:
     //图传roll轴校准临界力矩
     float Image_Roll_Calibrate_Stiffness = 810.0f;//510.0f;
     //图传pitch轴校准临界力矩
-    float Image_Pitch_Calibrate_Stiffness = 1900.0f;//4500.0f;
+    float Image_Pitch_Calibrate_Stiffness = 3000.0f;//4500.0f;
+    uint16_t pitch_calibration_count;
+    uint16_t roll_calibration_count;
     //内部函数
     void Output();
 };
